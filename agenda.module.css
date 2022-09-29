@@ -1,0 +1,69 @@
+.divP{
+    padding: 0 6.5%;
+}
+@font-face {
+    font-family: "Futura";
+    src: url("./fonts/FuturaPTBold.otf");
+}
+@font-face {
+    font-family: "NormalFutura";
+    src: url("./fonts/FuturaPTLight.otf");
+}
+/*Titulo*/
+.tituloAgenda{
+    color: #6566AA;
+    font-family: "Futura";
+    font-weight: bolder;
+    font-size: 2.5rem;
+    margin: 0;
+}
+.diretorio{
+    font-weight: 200;
+    font-family:sans-serif;
+}
+.Dflex{
+    flex-direction: row;
+    display: flex;
+}
+.agendaEventos{
+    margin-right: 1rem;
+    font-family: 'Futura';
+    font-size: 1.5rem;
+    position: relative;
+}
+.agendaEventos:nth-child(1):before{
+    content: '';
+    top:0;
+    left:0;
+    width: 100%;
+    position: absolute;
+    height: 100%;
+    border-bottom: 4px solid;
+    border-radius: 2px;
+}
+/*Periodo*/
+.divCal{
+    display: flex;
+}
+.divCalForm{
+    margin-right: 10%;
+
+}
+.divCalendario{
+    margin-right: 5%;
+}
+.divCalPeriodo{
+    font-family: 'Futura';
+    font-size: 1.5rem;
+    margin-top: 0;
+}
+.divCalLab{
+    font-family: 'NormalFutura';
+    margin-top: 2rem;
+    font-weight: 600;
+    font-size: 1.2rem;
+}
+.divCalGeneros{
+    margin-top: 0;
+}
+

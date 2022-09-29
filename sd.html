@@ -1,0 +1,158 @@
+<link rel="stylesheet" href="http://code.jquery.com/ui/1.9.0/themes/base/jquery-ui.css" />
+<script src="http://code.jquery.com/jquery-1.8.2.js"></script>
+<script src="http://code.jquery.com/ui/1.9.0/jquery-ui.js"></script>
+<link rel="stylesheet" href="./agenda.module.css">
+
+<!doctype html>
+
+<html>
+<head>
+
+    <meta charset="utf-8" />
+    <title>Calendário jQuery</title>
+
+</head>
+
+<body>
+<div class="divP">
+    <div>
+        <p class="diretorio">Inicio > Agenda</p>
+        <h1 class="tituloAgenda">Agenda</h1>
+        <div class="Dflex">
+            <h3 class="agendaEventos active">Eventos</h3>
+            <h3 class="agendaEventos">Exposições</h3>
+        </div>
+        <div class="divCal">
+            <form class="divCalForm">
+                <h3 class="divCalPeriodo">Período</h3>
+                <input class="divCalCheck" type="radio" id="hoje" name="date_type" value="hoje">
+                <label class="divCalLab"for="hoje">Hoje</label><br>
+                <input class="divCalCheck" type="radio" id="prox_7_dias" name="date_type" value="prox_7_dias">
+                <label class="divCalLab" for="prox_7_dias">Próximos 7 dias</label><br>
+                <input class="divCalCheck" type="radio" id="prox_30_dias" name="date_type" value="prox_30_dias">
+                <label class="divCalLab" for="prox_30_dias">Próximos 30 dias</label>
+                <button id="ano"type="button" style="background-color:#d8e2ae; border-radius: 90px; color:#7b9746;"  onclick="loadContent()">PESQUISAR</button>
+                <button id="ano"type="button" style="background-color:#d8e2ae; border-radius: 90px; color:#7b9746;"  onclick="console.log(obj)">PESQUISAR</button>
+            </form>
+            <div class='divCalendario'>
+            <div onchange="mostraEvento(value)" id="calendario"></div>
+                
+            </div>
+
+            <div>
+                <h3 class="divCalPeriodo">Generos</h3>
+                <div class="divCalGenerosCK">
+                    <form>
+                        <input type="radio" id="musica" name="category" value="musica" checked="true">
+                        <label class="divCalLab" for="musica">Música</label><br>
+                        <input type="radio" id="teatro" name="category" value="teatro">
+                        <label class="divCalLab" for="teatro">Teatro</label><br>
+                        <input type="radio" id="danca" name="category" value="danca">
+                        <label class="divCalLab" for="danca">Dança</label>
+                        <input type="radio" id="palestra" name="category" value="palestra">
+                        <label class="divCalLab" for="palestra">Palestra</label>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    
+</div>
+<div id="card"> </div>
+  
+</body>
+
+</html>
+
+
+<script>
+
+var obj = {}
+
+function mostraEvento(value){
+    let html = '';
+    var dias  = value.split('/')
+
+   rawData = agenda_local(dias[0], dias[1], dias[2])
+  rawData.forEach(element => {
+    html += ''
+     element.titulo;
+  });
+    document.getElementById('card').innerHTML = (html.length > 0) ? html : null;
+}
+
+function agenda_local(dia, mes, ano) {
+const {pautas} = obj;
+console.log(dia,mes,ano);
+//console.log(pautas)
+const filterData = Object.values(pautas)
+    .filter(pauta => {
+        const controleEspaco = Object.values(pauta.espaco).filter(espaco => {
+            const controleAgenda = Object.keys(espaco.agenda).filter(data => data === `${ano}-${mes}-${dia}`);
+            return controleAgenda.length;
+        });
+        return controleEspaco.length;
+    })
+    console.log(filterData);
+        
+return filterData;
+}
+
+function buscaSeteDias(dia, mes, ano) {
+    var hoje = new Date
+    var diaHoje = hoje.getDay
+    var mesHoje = hoje.getMonth
+    var hojeInteiro = parseInt(diaHoje)
+const {pautas} = obj;
+const filterData = Object.values(pautas)
+    .filter(pauta => {
+        const controleEspaco = Object.values(pauta.espaco).filter(espaco => {
+            const controleAgenda = Object.keys(espaco.agenda).filter(data => data >= `${ano}-${mesHoje}-${diaHoje}`  );
+            return controleAgenda.length;
+        });
+        return controleEspaco.length;
+    })
+    console.log(filterData);
+        
+return filterData;
+}
+
+window.onload = async function loadContent() {
+   
+        await jQuery.ajax({
+            url: 'https://sistemas.cultura.am.gov.br/sigec/api/ListarPautas?type=year&val1=2022',
+            data: {
+                format: 'json'
+            },
+            error: function (error) {
+                console.log('error', error);
+            },
+            dataType: 'json',
+  
+            success: function (data) {
+                Object.assign(obj,data);
+                console.log("ok")
+  
+            },
+            type: 'GET'
+        });
+       
+    
+    }
+    
+
+  
+  $(function() {
+    $("#calendario").datepicker({
+        dateFormat: 'dd/mm/yy',
+        dayNames: ['Domingo','Segunda','Terça','Quarta','Quinta','Sexta','Sábado','Domingo'],
+        dayNamesMin: ['D','S','T','Q','Q','S','S','D'],
+        dayNamesShort: ['Dom','Seg','Ter','Qua','Qui','Sex','Sáb','Dom'],
+        monthNames: ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'],
+        monthNamesShort: ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez']
+    });
+});
+
+</script>
